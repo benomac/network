@@ -7,5 +7,10 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
-    path("register", views.register, name="register")
+    path("register", views.register, name="register"),
+
+    #API's
+    path("add_new_post", views.add_new_post, name="add_new_post")
 ]
+
+
