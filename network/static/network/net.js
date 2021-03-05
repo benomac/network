@@ -1,15 +1,25 @@
 document.addEventListener('DOMContentLoaded', function(){
-    document.querySelector('#post-form').addEventListener('submit', add_new_post);
+    document.querySelector('#allposts').addEventListener('click', load_all_posts());
 });
 
-function add_new_post(event) {
-    event.preventDefault();
-    console.log(1)
-    fetch('/add_new_post', {
-        method: 'POST',
-        body: JSON.stringify({
-            newPost: document.querySelector('#post').value
-        })
-      })
-
+function load_all_posts() {
+    fetch('/all_posts')
+    .then(response => response.json())
+    .then(posts => {
+       
+        posts.forEach(post => {
+            console.log(post);
+            
+            for (const [key, value] of Object.entries(post)) {
+                if (key !== "id") {
+              
+                    div = document.createElement('div');
+                    div.className = key;
+                    div.innerHTML = value;
+                    document.querySelector('#all-posts').append(div)
+                    
+                    }
+              }
+        });
+    });
 }

@@ -2,19 +2,7 @@
 {% load static %}
 {% block body %}
 
-{% if user.is_authenticated %}
-<div id="new-post">
-    <h3>New Post</h3>
-    <form id="post-form" method="post">
-        {% csrf_token %}
-        <div id="user-post" class="form-group">
-            Say something! <input id="post" type="text" class="form-control">
-        </div>
-        
-        <input type="submit" class="btn btn-primary"/>
-    </form>
-</div>
-{% endif %}
+
 
 <div id="all-posts">
     

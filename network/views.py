@@ -3,8 +3,11 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from .forms import NewPostForm
+from django.http import JsonResponse
+from django.core import serializers
 
-from .models import User
+from .models import User, UserPosts
 
 
 def index(request):
@@ -62,8 +65,34 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-def add_new_post(request):
-    data = json.loads(request.body)
+def new_post(request):
+    if request.method == "POST":
+        user = request.user
+        form = NewPostForm(request.POST)
+        if form.is_valid():
+            # Get data from form
+            # Argument in [] HAS to be form element name!!
+            post = form.cleaned_data["post"]
+            new_post = UserPosts.objects.create(user=user, post=post)
+            new_post.save()
+            return render(request, "network/index.html", {
+        "form":NewPostForm()
+    })
+        print(post)
     
-    print(type(data))
-    pass
+    return render(request, "network/new_post.html", {
+        "form":NewPostForm()
+    })
+
+def all_posts(request):
+    # user = request.user
+    posts = UserPosts.objects.all()
+    
+    posts = posts.order_by("-timestamp").all()
+    print(posts)
+    return JsonResponse([post.serialize() for post in posts], safe=False)
+    
+
+
+
+    

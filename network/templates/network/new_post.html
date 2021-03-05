@@ -1,0 +1,31 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+
+{% if user.is_authenticated %}
+<div id="new-post">
+    <h3>New Post</h3>
+    <form action="{% url 'new_post' %}" id="post-form" method="post">
+        {% csrf_token %}
+        {% for element in form %}
+            {{ element.label_tag }}
+            <div class="element">
+                {{ element }}
+            </div>
+        {% endfor %}
+        
+        <input type="submit" class="btn btn-primary"/>
+    </form>
+</div>
+{% endif %}
+
+<div id="all-posts">
+    
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/net.js' %}"></script>
+{% endblock %}

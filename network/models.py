@@ -12,3 +12,13 @@ class UserPosts(models.Model):
     post = models.CharField(max_length=280)
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "post": self.post,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+            "likes": self.likes,
+            "user_id": self.user.username
+
+        }
