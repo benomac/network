@@ -4,10 +4,29 @@
 
 
 
+
+{% if user.is_authenticated %}
+<div id="new-post">
+    
+    <h3>New Post</h3>
+    <form action="/new_post" id="post-form" method="post">
+        {% csrf_token %}
+            <label>New Post:</label>
+            <div class="element">
+                <input type="text" name="post" required="" id="id_post">
+            </div>
+        
+        
+        <input type="submit" class="btn btn-primary">
+    </form>
+    
+</div>
+{% endif %}
+
+
 <div id="all-posts">
     
 </div>
-
 
 {% endblock %}
 

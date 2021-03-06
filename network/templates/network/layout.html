@@ -22,12 +22,13 @@
                     </li>
                 
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'new_post' %}">New Post</a>
+                <li id="newpost" class="nav-item">
+                    <p class="nav-link">New Post</p>
                   </li>
                 {% endif %}
                 <li class="nav-item">
-                  <a id="allposts" class="nav-link" href="{% url 'index' %}">All Posts</a>
+                  
+                  <p id="allposts" class="nav-link">All Posts</p>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
