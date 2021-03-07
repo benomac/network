@@ -1,5 +1,5 @@
 {% extends "network/layout.html" %}
-
+{% load static %}
 {% block body %}
 
     <h2>Register</h2>
@@ -27,4 +27,8 @@
 
     Already have an account? <a href="{% url 'login' %}">Log In here.</a>
 
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/net.js' %}"></script>
 {% endblock %}

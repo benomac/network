@@ -11,7 +11,8 @@ urlpatterns = [
     path("new_post", views.new_post, name="new_post"),
 
     #API's
-    path("all_posts", views.all_posts, name="all_posts")
+    path("all_posts", views.all_posts, name="all_posts"),
+    path("load_profile", views.load_profile, name="load_profile")
 ]
 
 

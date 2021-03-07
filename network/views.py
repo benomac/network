@@ -93,6 +93,11 @@ def all_posts(request):
     return JsonResponse([post.serialize() for post in posts], safe=False)
     
 
+def load_profile(request):
+    profile_content = UserPosts.objects.filter(user=request.user)
+    print("isaid", profile_content[0].post)
+    return JsonResponse([post.serialize() for post in profile_content], safe=False)
+
 
 
     

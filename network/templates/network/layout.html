@@ -17,18 +17,18 @@
             <div>
               <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
-                    </li>
-                
+                <li id="username" class="nav-item">
+                    <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
+                </li>
+            
 
                 <li id="newpost" class="nav-item">
-                    <p class="nav-link">New Post</p>
+                    <a class="nav-link" href="#">New Post</a>
                   </li>
                 {% endif %}
                 <li class="nav-item">
                   
-                  <p id="allposts" class="nav-link">All Posts</p>
+                  <a id="allposts" class="nav-link" href="#">All Posts</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
