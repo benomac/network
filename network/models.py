@@ -5,7 +5,14 @@ from django.db import models
 class User(AbstractUser):
     followers = models.IntegerField(default=0)
     followed = models.IntegerField(default=0)
-    pass
+    def serialize(self):
+        return {
+            "followers": self.followers,
+            "followed": self.followed
+            
+
+        }
+  
 
 class UserPosts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="poster")

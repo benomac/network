@@ -95,9 +95,13 @@ def all_posts(request):
 
 def load_profile(request):
     profile_content = UserPosts.objects.filter(user=request.user)
-    print("isaid", profile_content[0].post)
     return JsonResponse([post.serialize() for post in profile_content], safe=False)
+    # return JsonResponse(all_cont, safe=False)
 
-
-
+def get_foll(request):
+    num_of_foll = User.objects.filter(username=request.user)
+    print(num_of_foll[0].followers)
+    print(num_of_foll[0].followed)
+    return JsonResponse([foll.serialize() for foll in num_of_foll], safe=False)
+# ADD FOLLOWERS AND FOLLOWING TO PROFILE PAGE BY ADDING NEW ELEMENT TO PROFILE_CONTENT OBJECT
     
