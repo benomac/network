@@ -19,13 +19,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // load_all_posts();
     });
 
-    if (docQS('#username') !== null ) {
+    if (docQS('.username') !== null ) {
         
-        docQS('#username').addEventListener('click', function() {
+        // DO DQSALL AND LOOP THROUGH THEM TO ADD ONCLICK TO ALL USERNAME CLASSES
+
+        docQS('.username').addEventListener('click', function() {
             // Stops the user data loading evrytime the username is clicked
             docQS('#profile').innerHTML = '';
             load_profile_or_allposts('load_profile');
-            get_foll()
+            
         })
 
     }
@@ -34,42 +36,51 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 
-
+//Shows the new post form view
 function new_post_view() {
-   
     docQS('#new-post').style.display = 'block';
     docQS('#all-posts').style.display = 'none';
     docQS('#profile').style.display = 'none'; 
 }
 
+// Loads the Current users profile, or the allposts view
 function load_profile_or_allposts(page) {
     fetch(`/${page}`)
     .then(response => response.json())
     .then(posts => {
        console.log(posts)
         posts.forEach(post => {
+            
             let div1 = document.createElement('div')
             div1.className = "posted";
+            
             for (const [key, value] of Object.entries(post)) {
                 if (key !== "id") {
               
                     div = document.createElement('div');
-                    div.className = key;
+                    if(key === "user") {
+                        div.className = "username";
+                    } else {
+                        div.className = key;
+                    }
+                    
                     div.innerHTML = key + " " + value;
                     div1.append(div)
-                    
                 }
             }
             console.log("when")
             if (docQS('#profile') !== null && page === 'load_profile') {
                 docQS('#profile').append(div1);
+                console.log(1)
+                
             } else if (docQS('#all-posts') !== null && page === 'all_posts') {
                 docQS('#all-posts').append(div1);
                 }
         })
-        
+        if(docQS('#profile') !== null) {
+            get_foll()
+        }
     });
-
     if (page === 'load_profile') {
         docQS('#new-post').style.display = 'none';
         docQS('#all-posts').style.display = 'none';
@@ -83,18 +94,25 @@ function load_profile_or_allposts(page) {
     }
 }
 
+//get the users followers and people followed and add them to the users profile
+
 function get_foll() {
     fetch('get_foll')
     .then(response => response.json())
     .then(posts => {
-        console.log("POSTS", posts)
-        let div = document.createElement('div')
+        console.log("POSTS", posts);
+        let div = document.createElement('div');
+        let div2 = document.createElement('div');
+        div.className = 'followers';
+        div2.className = 'followed';
+        
         if (docQS('#profile') !== null) {
-            posts.forEach(post => {
-                div.append(`${post.followers} followers`)
-                div.append(`${post.followed} followed`)
+            
+                div.append(`${posts[0].followers} followers`);
+                div2.append(`${posts[0].followed} followed`);
+                
                 docQS('#profile').append(div);
-            })
+                docQS('#profile').append(div2);
         }
     })
 }

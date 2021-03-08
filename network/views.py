@@ -6,6 +6,7 @@ from django.urls import reverse
 from .forms import NewPostForm
 from django.http import JsonResponse
 from django.core import serializers
+from django.contrib.auth.decorators import login_required
 
 from .models import User, UserPosts
 
@@ -93,15 +94,20 @@ def all_posts(request):
     return JsonResponse([post.serialize() for post in posts], safe=False)
     
 
+@login_required()
 def load_profile(request):
     profile_content = UserPosts.objects.filter(user=request.user)
     return JsonResponse([post.serialize() for post in profile_content], safe=False)
     # return JsonResponse(all_cont, safe=False)
 
+
+@login_required()
 def get_foll(request):
     num_of_foll = User.objects.filter(username=request.user)
-    print(num_of_foll[0].followers)
-    print(num_of_foll[0].followed)
     return JsonResponse([foll.serialize() for foll in num_of_foll], safe=False)
-# ADD FOLLOWERS AND FOLLOWING TO PROFILE PAGE BY ADDING NEW ELEMENT TO PROFILE_CONTENT OBJECT
+
+
+def following(request):
+    following = User.objects.get(request.user)
+    
     
