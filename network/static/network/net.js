@@ -22,7 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (docQS('.username') !== null ) {
         
         // DO DQSALL AND LOOP THROUGH THEM TO ADD ONCLICK TO ALL USERNAME CLASSES
-
+        //SO THAT WHEN YOU CLICK ON A PERSONS USERNAME IT'LL TAKE YOU TO THEIR PROFILE
+        // YOU'LL NEED TO CREATE A DIFFERENT ROUTE AS BY DEFAULT YOU'LL BE TAKEN TO THE LOGGED IN
+        //USERS PROFILE.
         docQS('.username').addEventListener('click', function() {
             // Stops the user data loading evrytime the username is clicked
             docQS('#profile').innerHTML = '';
