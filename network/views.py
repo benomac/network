@@ -95,15 +95,17 @@ def all_posts(request):
     
 
 @login_required()
-def load_profile(request):
-    profile_content = UserPosts.objects.filter(user=request.user)
+def load_profile(request, user):
+    user = User.objects.get(username=user)
+    profile_content = UserPosts.objects.filter(user=user.id)
+    print(profile_content)
     return JsonResponse([post.serialize() for post in profile_content], safe=False)
     # return JsonResponse(all_cont, safe=False)
 
 
 @login_required()
-def get_foll(request):
-    num_of_foll = User.objects.filter(username=request.user)
+def get_foll(request, user):
+    num_of_foll = User.objects.filter(username=user)
     return JsonResponse([foll.serialize() for foll in num_of_foll], safe=False)
 
 

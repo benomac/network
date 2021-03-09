@@ -12,29 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     }
 
+    //Loads all post when "all posts" link is clicked
     docQS('#allposts').addEventListener('click', function() {
         console.log("out")
         window.location.href = '/';
-        // all_posts_view()
-        // load_all_posts();
+        
     });
 
-    if (docQS('.username') !== null ) {
-        
-        // DO DQSALL AND LOOP THROUGH THEM TO ADD ONCLICK TO ALL USERNAME CLASSES
-        //SO THAT WHEN YOU CLICK ON A PERSONS USERNAME IT'LL TAKE YOU TO THEIR PROFILE
-        // YOU'LL NEED TO CREATE A DIFFERENT ROUTE AS BY DEFAULT YOU'LL BE TAKEN TO THE LOGGED IN
-        //USERS PROFILE.
-        docQS('.username').addEventListener('click', function() {
-            // Stops the user data loading evrytime the username is clicked
-            docQS('#profile').innerHTML = '';
-            load_profile_or_allposts('load_profile');
-            
-        })
-
-    }
-    
-    load_profile_or_allposts('all_posts');
+    allposts('all_posts');
   });
 
 
@@ -45,23 +30,27 @@ function new_post_view() {
     docQS('#profile').style.display = 'none'; 
 }
 
-// Loads the Current users profile, or the allposts view
-function load_profile_or_allposts(page) {
-    fetch(`/${page}`)
+// Loads the allposts view
+function allposts() {
+    fetch('all_posts')
     .then(response => response.json())
     .then(posts => {
-       console.log(posts)
+       
         posts.forEach(post => {
             
             let div1 = document.createElement('div')
             div1.className = "posted";
             
             for (const [key, value] of Object.entries(post)) {
+                // Stops the id being loaded from the model
                 if (key !== "id") {
-              
                     div = document.createElement('div');
+                    
+                    //Add a class of 'username' to the users username, and a data-set
+                    // of their user name also.
                     if(key === "user") {
                         div.className = "username";
+                        div.dataset.name = value;
                     } else {
                         div.className = key;
                     }
@@ -70,36 +59,39 @@ function load_profile_or_allposts(page) {
                     div1.append(div)
                 }
             }
-            console.log("when")
-            if (docQS('#profile') !== null && page === 'load_profile') {
-                docQS('#profile').append(div1);
-                console.log(1)
-                
-            } else if (docQS('#all-posts') !== null && page === 'all_posts') {
+            
+            if (docQS('#all-posts') !== null) {
                 docQS('#all-posts').append(div1);
-                }
+            }
+            
         })
-        if(docQS('#profile') !== null) {
-            get_foll()
-        }
+        
+        //Add onclick event to load users profile when ANY username is clicked
+        document.querySelectorAll('.username').forEach(user => {
+            user.onclick = function() {
+                if(docQS('#profile') !== null) {
+                docQS('#profile').innerHTML = '';
+                }
+                load_profile(this.dataset.name)
+                
+            }
+            
+        })
+        
+        
     });
-    if (page === 'load_profile') {
-        docQS('#new-post').style.display = 'none';
-        docQS('#all-posts').style.display = 'none';
-        docQS('#profile').style.display = 'block'; 
-    } else if (page === 'all_posts') {
-        if (docQS('#new-post') !== null) {
-        docQS('#new-post').style.display = 'none';
-        docQS('#all-posts').style.display = 'block';
-        docQS('#profile').style.display = 'none'; 
-        }
+    
+    if (docQS('#new-post') !== null) {
+    docQS('#new-post').style.display = 'none';
+    docQS('#all-posts').style.display = 'block';
+    docQS('#profile').style.display = 'none'; 
     }
 }
 
 //get the users followers and people followed and add them to the users profile
 
-function get_foll() {
-    fetch('get_foll')
+function get_foll(user) {
+    fetch(`get_foll/${user}`)
     .then(response => response.json())
     .then(posts => {
         console.log("POSTS", posts);
@@ -117,4 +109,45 @@ function get_foll() {
                 docQS('#profile').append(div2);
         }
     })
+}
+
+//Loads a users profile
+function load_profile(user) {
+    fetch(`load_profile/${user}`)
+    .then(response => response.json())
+    .then(posts => {
+        
+        posts.forEach( post => {
+        let div1 = document.createElement('div')
+            div1.className = "posted";
+            for (const [key, value] of Object.entries(post)) {
+                if (key !== "id") {
+              
+                    div = document.createElement('div');
+                    if(key === "user") {
+                        div.className = "username";
+                        div.dataset.name = value;
+                    } else {
+                        div.className = key;
+                    }
+                    
+                    div.innerHTML = key + " " + value;
+                    div1.append(div)
+                }
+            }
+            if (docQS('#profile') !== null) {
+                docQS('#profile').append(div1);
+            }
+        })
+        if(docQS('#profile') !== null) {
+            get_foll(user)
+        }
+    })
+    
+    if (docQS('#profile') !== null) {
+        docQS('#new-post').style.display = 'none';
+        docQS('#all-posts').style.display = 'none';
+        docQS('#profile').style.display = 'block'; 
+            
+        }
 }
