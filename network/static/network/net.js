@@ -5,6 +5,7 @@ function docQS(id) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+    //Add current users name to a variable to be used for adding follow button.
     
     if(docQS('#newpost') !== null) {
     docQS('#newpost').addEventListener('click', function() {
@@ -73,13 +74,13 @@ function allposts() {
                 docQS('#profile').innerHTML = '';
                 }
                 load_profile(this.dataset.name)
-                
             }
-            
         })
-        
-        
     });
+
+        
+
+        
     
     if (docQS('#new-post') !== null) {
     docQS('#new-post').style.display = 'none';
@@ -121,7 +122,8 @@ function load_profile(user) {
         let div1 = document.createElement('div')
             div1.className = "posted";
             for (const [key, value] of Object.entries(post)) {
-                if (key !== "id") {
+                //Hide post id and user_id from user profile
+                if (key !== "id" && key !== "user_id") {
               
                     div = document.createElement('div');
                     if(key === "user") {
@@ -137,12 +139,37 @@ function load_profile(user) {
             }
             if (docQS('#profile') !== null) {
                 docQS('#profile').append(div1);
+                
+                
             }
         })
+
+        
+        //Add the followers and followed amounts to the profile view.
         if(docQS('#profile') !== null) {
             get_foll(user)
         }
-    })
+        //Create variable to hold the value of the logged in user.
+        let cur_user = docQS('#cur_user').innerHTML;
+                
+        //Add button to a users profile if it is not the logged in user
+        if (cur_user !== posts[0].user) {
+            let button = document.createElement('button')
+            button.innerHTML = "Follow"
+            button.className = "follow"
+
+            //give button, the dataset of the user whos profile it is, their id from usermodel
+            button.dataset.user = posts[2].user_id
+            docQS('#profile').append(button);
+        }
+
+        //THIS IS WHERE ILL PUT THE LOGIC TO FOLLOW UNFOLLOW
+        if (docQS('.follow') !== null) {
+        docQS('.follow').onclick = function() {
+                console.log(this.dataset.user)
+            }
+        }
+        })
     
     if (docQS('#profile') !== null) {
         docQS('#new-post').style.display = 'none';
@@ -150,4 +177,13 @@ function load_profile(user) {
         docQS('#profile').style.display = 'block'; 
             
         }
+}
+
+function follow(user) {
+    // fetch(`load_profile/${user}`)
+    // .then(response => response.json())
+    // .then(posts => {
+    //     console.log(user)
+    // })
+    console.log(user)
 }

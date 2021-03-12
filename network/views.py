@@ -66,24 +66,24 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-def new_post(request):
-    if request.method == "POST":
-        user = request.user
-        form = NewPostForm(request.POST)
-        if form.is_valid():
-            # Get data from form
-            # Argument in [] HAS to be form element name!!
-            post = form.cleaned_data["post"]
-            new_post = UserPosts.objects.create(user=user, post=post)
-            new_post.save()
-            return render(request, "network/index.html", {
-        "form":NewPostForm()
-    })
-        print(post)
+# def new_post(request):
+#     if request.method == "POST":
+#         user = request.user
+#         form = NewPostForm(request.POST)
+#         if form.is_valid():
+#             # Get data from form
+#             # Argument in [] HAS to be form element name!!
+#             post = form.cleaned_data["post"]
+#             new_post = UserPosts.objects.create(user=user, post=post)
+#             new_post.save()
+#             return render(request, "network/index.html", {
+#         "form":NewPostForm()
+#     })
+#         print(post)
     
-    return render(request, "network/new_post.html", {
-        "form":NewPostForm()
-    })
+#     return render(request, "network/new_post.html", {
+#         "form":NewPostForm()
+#     })
 
 def all_posts(request):
     # user = request.user
@@ -98,8 +98,12 @@ def all_posts(request):
 def load_profile(request, user):
     user = User.objects.get(username=user)
     profile_content = UserPosts.objects.filter(user=user.id)
-    print(profile_content)
-    return JsonResponse([post.serialize() for post in profile_content], safe=False)
+    add_id = [post.serialize() for post in profile_content]
+    add_id.append({'user_id':user.id})
+    print(add_id)
+    
+
+    return JsonResponse(add_id, safe=False)
     # return JsonResponse(all_cont, safe=False)
 
 
@@ -109,7 +113,15 @@ def get_foll(request, user):
     return JsonResponse([foll.serialize() for foll in num_of_foll], safe=False)
 
 
-def following(request):
-    following = User.objects.get(request.user)
+def following(request, follow_or_unfollow, to_follow):
+    to_follow = User.objects.get(username=to_follow)
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if follow_or_unfollow == "follow":
+            follow = Following.objects.create(user=request.user, following=to_follow.id)
+            follow.save()
+        else:
+            following.object.filter(user=request.user, following=to_follow).delete()
+
     
     
