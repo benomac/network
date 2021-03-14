@@ -34,3 +34,11 @@ class UserPosts(models.Model):
 class Following(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     following = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follows")
+
+    def serialize(self):
+        return {
+            "user": self.user,
+            "following": self.following,
+            
+
+        }
